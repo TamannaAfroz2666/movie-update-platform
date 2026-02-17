@@ -29,7 +29,7 @@ function formatRuntime(runtime?: number | null) {
 
 export default function HeroCaroselView() {
   // ✅ API
-  const { data, isLoading, isError } = useGetMovieListQuery();
+  const { data, isLoading, isError } = useGetMovieListQuery(1);
 
   // ✅ results array (tomar response: data.data.results)
   const dataStore = useMemo(() => {

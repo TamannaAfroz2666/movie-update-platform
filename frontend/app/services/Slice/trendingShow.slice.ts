@@ -12,18 +12,20 @@ const trendingCoomingSoonSlice = createSlice({
     initialState,
     reducers: {},
     extraReducers: (builder) => {
-        builder.addCase(getShowThunk.pending, (state) => {
-            state.loading = true;
-            state.error = null
-        })
-            .addCase(getShowThunk.fulfilled, (state, action) => {
-                state.loading = false;
-                state.result = action.payload;
-            })
-            .addCase(getShowThunk.rejected, (state, action) => {
-                state.loading = false;
-                state.error = action.payload || 'Failed'
-            })
+      builder
+  .addCase(getShowThunk.pending, (state) => {
+    state.loading = true;
+    state.error = null;
+  })
+  .addCase(getShowThunk.fulfilled, (state, action) => {
+    state.loading = false;
+    state.result = action.payload.result.data;   // ✅ array
+    // state.meta = action.payload.result.meta;  // optional
+  })
+  .addCase(getShowThunk.rejected, (state, action) => {
+    state.loading = false;
+    state.error = action.error?.message ?? "Failed";
+  });
     }
 })
 

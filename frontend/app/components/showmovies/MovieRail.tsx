@@ -10,8 +10,8 @@ type Props = {
     hideRating?: boolean;
 };
 
-const getRatingStyle = (rating: number) => {
-    const r = Number(rating) || 0;
+const getRatingStyle = (rating?: number) => {
+    const r = rating ?? 0;
 
 
 

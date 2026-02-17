@@ -34,7 +34,7 @@ const trendingSeriesSlice = createSlice({
             })
             .addCase(getSeriesThunk.rejected, (state, action) => {
                 state.loading = false;
-                state.error = action.payload || "Failed";
+                state.error = action.error?.message ?? "Failed";
             });
     },
 });

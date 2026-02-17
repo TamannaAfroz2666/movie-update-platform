@@ -33,7 +33,7 @@ function getTmdbImageUrl(movie: any) {
 }
 
 export default function HeroCaroselView() {
-  const { data, isLoading, isError } = useGetMovieListQuery();
+  const { data, isLoading, isError } = useGetMovieListQuery(1);
 
  
 

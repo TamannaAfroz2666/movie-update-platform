@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Bell, X } from "lucide-react";
 import { setPopupRecord } from "@/app/lib/popupTTL";
 import { Button, Form, Input, message } from "antd";
-import { useAppDispatch } from "@/app/store/hooks";
+import { useAppDispatch, useAppSelector } from "@/app/store/hooks";
 import { AppDispatch } from "@/app/store/store";
 import { RootState } from "@reduxjs/toolkit/query";
 import { useDispatch, useSelector } from "react-redux";
@@ -49,8 +49,8 @@ export default function UpdatesPopup({ open, onClose }: Props) {
 
   const [email, setEmail] = useState("");
   const [form] = Form.useForm();
-  const dispatch = useAppDispatch<AppDispatch>();
-  const { loading, error } = useSelector((s: RootState) => s.movieUser);
+  const dispatch = useAppDispatch();
+const { loading, error } = useAppSelector((s) => s.movieUser);
 
   if (!open) return null;
 
@@ -153,11 +153,11 @@ export default function UpdatesPopup({ open, onClose }: Props) {
 
                   <div className="mt-4">
                     <Form.Item>
-                     
+
 
 
                       <div className="mt-0 flex gap-3">
-                        
+
                         <Button
                           type="primary"
                           htmlType="submit"

@@ -4,23 +4,23 @@ import { TrendingTvShowItems, TrendingTvShowState } from "@/app/lib/TrendingMovi
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-type trendingShowApiCall = {
-    result: {
-        data: TrendingTvShowItems[];
-        meta: any;
-    };
-}
+// type trendingShowApiCall = {
+//     result: {
+//         data: TrendingTvShowItems[];
+//         meta: any;
+//     };
+// }
 type trendingShowApiResponse = {
     success: boolean,
     message: string,
     result: {
         data: TrendingTvShowItems[];
-        meta: any;
+        meta: unknown;
     };
 }
 
 export const getShowThunk = createAsyncThunk<
-    trendingShowApiCall,
+      TrendingTvShowItems[],
     void,
     { rejectValue: string }
 >("trendingTvShows/get", async (_, { rejectWithValue }) => {
@@ -31,7 +31,7 @@ export const getShowThunk = createAsyncThunk<
         return data;
 
 
-    } catch (e: any) {
-        return rejectWithValue(e?.message || "Network error");
+    } catch (e) {
+        return rejectWithValue("Network error");
     }
 });
