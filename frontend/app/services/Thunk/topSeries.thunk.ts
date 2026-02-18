@@ -4,7 +4,7 @@ import { API_ENDPOINTS } from "../../api/apiEndpoints";
 import { TrendingTopSeries } from "@/app/lib/TrendingMoviesType";
 import axios from "axios";
 
-type TvSeriesApiData ={
+type TvSeriesApiData = {
   page: number;
   results: TrendingTopSeries[];
   total_pages: number;
@@ -13,31 +13,54 @@ type TvSeriesApiData ={
 type TvSeriesApiRespose = {
   success: boolean;
   message: string;
-  data: TvSeriesApiData;
+  data: TvSeriesApiData[];
 
 }
 
+
+
+// export const getSeriesThunk = createAsyncThunk<
+//   TvSeriesApiData,
+//   void,
+//   { rejectValue: string }
+// >("trendingseries/get", async (_, { rejectWithValue }) => {
+//   try {
+
+//     const res = await axios.get<TvSeriesApiRespose>(`${API_BASE_URL}${API_ENDPOINTS.MOVIE.trendingTopSeries}`)
+//     const data = res.data.data;
+//     console.log('trendingTopSeries', data)
+
+//     return {
+//       results: data,
+//       page: 1,
+//       total_pages: 1,
+//     };
+
+
+//   } catch (e) {
+//     return rejectWithValue("Network error");
+//   }
+// });
+
+type TopSeriesApiResponse = {
+  success: boolean;
+  message: string;
+  data: TrendingTopSeries[];
+};
+
 export const getSeriesThunk = createAsyncThunk<
-  TvSeriesApiData,
+  TrendingTopSeries[],   
   void,
   { rejectValue: string }
 >("trendingseries/get", async (_, { rejectWithValue }) => {
   try {
-    
-    const res = await axios.get<TvSeriesApiRespose> (`${API_BASE_URL}${API_ENDPOINTS.MOVIE.trendingTopSeries}`) 
-    const data = res.data.data;
-    console.log('trendingTopSeries', data)
- 
-      return {
-        results: data,            // ✅ slice expects results
-        page: 1,                  // ✅ backend pagination নাই তাই fixed
-        total_pages: 1,
-        // total_results: data.length,
-      };
-  
-    
+    const res = await axios.get<TopSeriesApiResponse>(
+      `${API_BASE_URL}${API_ENDPOINTS.MOVIE.trendingTopSeries}`
+    );
+
+    return res.data.data;  
   } catch (e: any) {
-    return rejectWithValue(e?.message || "Network error");
+    return rejectWithValue(e?.message ?? "Network error");
   }
 });
 

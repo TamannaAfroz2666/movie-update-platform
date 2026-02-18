@@ -6,9 +6,9 @@ export const API_ENDPOINTS = {
     addUser: "/api/movie-user",
     trendingMovies: "/api/trending/movies/feed?enrich=omdb",
     trendingTopSeries: "/api/top-series?enrich=omdb",
-    trendingTvShow: "/api/tv-shows?enrich=omdb",
+    trendingTvShow: "/api/tv-shows?type=on_the_air&enrich=omdb",
     trendingCommingSoon: "/api/comming-soon",
-   
+
   },
 
 

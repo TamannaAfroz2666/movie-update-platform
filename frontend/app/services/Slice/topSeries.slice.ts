@@ -1,15 +1,20 @@
 import { topSeriesState, } from "@/app/lib/TrendingMoviesType";
 import { createSlice } from "@reduxjs/toolkit";
 import { getSeriesThunk } from "../Thunk/topSeries.thunk";
+import { TrendingTopSeries } from "@/app/lib/TrendingMoviesType";
 
-const initialState: topSeriesState = {
+
+
+type TopSeriesState = {
+    results: TrendingTopSeries[];
+    loading: boolean;
+    error: string | null;
+};
+
+const initialState: TopSeriesState = {
     results: [],
-    page: 0,
-    total_pages: 0,
-    total_results: 0,
     loading: false,
-    error: null
-
+    error: null,
 };
 
 
@@ -26,15 +31,13 @@ const trendingSeriesSlice = createSlice({
             .addCase(getSeriesThunk.fulfilled, (state, action) => {
                 console.log("TOP SERIES PAYLOAD:", action.payload);
                 state.loading = false;
-                state.results = action.payload.results;
-                state.page = action.payload.page;
-                state.total_pages = action.payload.total_pages;
-                state.total_results = action.payload.total_results;
+                state.results = action.payload;
 
             })
             .addCase(getSeriesThunk.rejected, (state, action) => {
                 state.loading = false;
-                state.error = action.error?.message ?? "Failed";
+                state.error =
+                    action.payload ?? action.error?.message ?? "Failed";
             });
     },
 });

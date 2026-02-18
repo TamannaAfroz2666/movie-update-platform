@@ -1,37 +1,37 @@
+import axios from "axios";
+import { createAsyncThunk } from "@reduxjs/toolkit";
 import { API_BASE_URL } from "@/app/api/apiConfigs";
 import { API_ENDPOINTS } from "@/app/api/apiEndpoints";
-import { TrendingTvShowItems, TrendingTvShowState } from "@/app/lib/TrendingMoviesType";
-import { createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
 
-// type trendingShowApiCall = {
-//     result: {
-//         data: TrendingTvShowItems[];
-//         meta: any;
-//     };
-// }
-type trendingShowApiResponse = {
-    success: boolean,
-    message: string,
-    result: {
-        data: TrendingTvShowItems[];
-        meta: unknown;
-    };
-}
+// ✅ series item type (adjust fields if you have your own)
+export type TopSeriesItem = {
+  id: number;
+  name: string;
+  poster_path: string | null;
+  overview: string;
+  popularity: number;
+  vote_average: number;
+  vote_count: number;
+  first_air_date?: string;
+};
+
+type TopSeriesApiResponse = {
+  success: boolean;
+  message: string;
+  result: { data: TopSeriesItem[] };
+};
 
 export const getShowThunk = createAsyncThunk<
-      TrendingTvShowItems[],
-    void,
-    { rejectValue: string }
->("trendingTvShows/get", async (_, { rejectWithValue }) => {
-    try {
-
-        const res = await axios.get<trendingShowApiResponse>(`${API_BASE_URL}${API_ENDPOINTS.MOVIE.trendingTvShow}`)
-        const data = res.data.result.data;
-        return data;
-
-
-    } catch (e) {
-        return rejectWithValue("Network error");
-    }
+  TopSeriesItem[],          // ✅ payload array
+  void,
+  { rejectValue: string }
+>("trendingseries/get", async (_, { rejectWithValue }) => {
+  try {
+    const res = await axios.get<TopSeriesApiResponse>(
+      `${API_BASE_URL}${API_ENDPOINTS.MOVIE.trendingTopSeries}`
+    );
+    return res.data.result.data; // ✅ only array
+  } catch (e) {
+    return rejectWithValue("Network error");
+  }
 });
