@@ -14,6 +14,6 @@ app.use(express.urlencoded({extended: true}));
 app.use(cookieParser());
 
 app.use('/api', movieUrl);
-
+ 
 
 export default  app;
