@@ -6,7 +6,7 @@ import { getWeeklyTop5 } from "../services/weeklyTopRatingMovies.service.js";
 import { weeklyMoviesTemplate } from "../template/weeklyTemplates.js";
 import { sendEmail } from "../utils/mailer.js";
 
-// import { getWeeklyTop5 } from "../services/weeklyTopRatingMovies.service.js";
+
 
 export async function sendWeeklyMoviesToOne(to) {
  
@@ -16,7 +16,7 @@ export async function sendWeeklyMoviesToOne(to) {
 
     //  NEW: compute weekly top 5 (movie + tv)
     const top5 = await getWeeklyTop5({ appUrl });
-    console.log(" top5 sample =", top5[0]); // debug
+    console.log(" top5 sample =", top5[0]); 
 
 const html = weeklyMoviesTemplate({
   movies: top5,        //  IMPORTANT

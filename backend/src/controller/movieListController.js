@@ -145,12 +145,21 @@ export async function addMovieUserController(req, res, next) {
     //  respond fast
     res.status(201).json({ success: true, data });
 
-    //  MUST run after response (no return above)
-    console.log(" Triggering instant email for:", email);
 
-    void sendWeeklyMoviesToOne(email)
-      .then(() => console.log("Instant email sent:", email))
-      .catch((e) => console.error(" Instant email failed:", e?.message || e));
+
+    // void sendWeeklyMoviesToOne(email)
+    //   .then(() => console.log("Instant email sent:", email))
+    //   .catch((e) => console.error(" Instant email failed:", e?.message || e));
+
+      try {
+      await sendWeeklyMoviesToOne(email);
+      return res.status(201).json({ success: true, data, emailSent: true });
+    } catch (e) {
+      console.error("Instant email failed:", e?.message || e);
+      return res.status(201).json({ success: true, data, emailSent: false });
+    }
+
+
   } catch (err) {
     next(err);
   }
