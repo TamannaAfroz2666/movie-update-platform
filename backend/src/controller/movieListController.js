@@ -135,6 +135,8 @@ export async function getTvShowsControllerIs(req, res, next) {
 export async function addMovieUserController(req, res, next) {
   try {
     const { email } = req.body;
+    const baseUrl = `${req.protocol}://${req.get("host")}`;
+    console.log('baseUrl',baseUrl)
    
 
     const data = await addMovieUserService(email);
@@ -143,16 +145,10 @@ export async function addMovieUserController(req, res, next) {
     }
 
     //  respond fast
-    res.status(201).json({ success: true, data });
-
-
-
-    // void sendWeeklyMoviesToOne(email)
-    //   .then(() => console.log("Instant email sent:", email))
-    //   .catch((e) => console.error(" Instant email failed:", e?.message || e));
+    // res.status(201).json({ success: true, data });
 
       try {
-      await sendWeeklyMoviesToOne(email);
+      await sendWeeklyMoviesToOne(email, baseUrl);
       return res.status(201).json({ success: true, data, emailSent: true });
     } catch (e) {
       console.error("Instant email failed:", e?.message || e);

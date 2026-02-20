@@ -8,10 +8,10 @@ import { sendEmail } from "../utils/mailer.js";
 
 
 
-export async function sendWeeklyMoviesToOne(to) {
+export async function sendWeeklyMoviesToOne(to, baseUrl) {
  
 
-    const appUrl = process.env.APP_URL; // e.g. http://localhost:4000
+    const appUrl = process.env.APP_URL || appUrlFromReq; // e.g. http://localhost:4000
     if (!appUrl) throw new Error("APP_URL missing in .env");
 
     //  NEW: compute weekly top 5 (movie + tv)
@@ -19,7 +19,7 @@ export async function sendWeeklyMoviesToOne(to) {
     console.log(" top5 sample =", top5[0]); 
 
 const html = weeklyMoviesTemplate({
-  movies: top5,        //  IMPORTANT
+  movies: top5,        
   title: "",
   introText: "5 Things to Watch This Week",
 });
