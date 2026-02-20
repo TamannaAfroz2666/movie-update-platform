@@ -10,7 +10,6 @@ export const validateRegistration = [
 
 export function handleValidation(req, res, next) {
     const errors = validationResult(req);
-    console.log('see errr', errors);
     if (!errors.isEmpty()) {
         return res.status(400).json({
             success: false,

@@ -19,29 +19,6 @@ type TvSeriesApiRespose = {
 
 
 
-// export const getSeriesThunk = createAsyncThunk<
-//   TvSeriesApiData,
-//   void,
-//   { rejectValue: string }
-// >("trendingseries/get", async (_, { rejectWithValue }) => {
-//   try {
-
-//     const res = await axios.get<TvSeriesApiRespose>(`${API_BASE_URL}${API_ENDPOINTS.MOVIE.trendingTopSeries}`)
-//     const data = res.data.data;
-//     console.log('trendingTopSeries', data)
-
-//     return {
-//       results: data,
-//       page: 1,
-//       total_pages: 1,
-//     };
-
-
-//   } catch (e) {
-//     return rejectWithValue("Network error");
-//   }
-// });
-
 type TopSeriesApiResponse = {
   success: boolean;
   message: string;

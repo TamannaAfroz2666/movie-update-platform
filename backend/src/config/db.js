@@ -15,11 +15,8 @@ export const pool = new Pool({
 
 export async function connectToDb() {
   try {
-    console.log("ENV:", process.env.NODE_ENV);
-    console.log("DB:", process.env.DB_URL ? "FOUND" : "NOT FOUND");
-
     const client = await pool.connect();
-    console.log("postgresql connected with pg");
+    
     client.release();
   } catch (err) {
     console.error("Database connection failed", err);

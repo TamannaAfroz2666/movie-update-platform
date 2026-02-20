@@ -42,7 +42,6 @@ export default function HeroCaroselView() {
     return data?.items ?? [];
   }, [data]);
 
-//  console.log('check api data', dataStore);
 
   //  NEW: sorted + cleaned data (present year / newest first)
   const viewData = useMemo(() => {
@@ -88,7 +87,6 @@ export default function HeroCaroselView() {
       </div>
     );
   }
-  // console.log('data',viewData)
   return (
     <>
       <TrailerModal

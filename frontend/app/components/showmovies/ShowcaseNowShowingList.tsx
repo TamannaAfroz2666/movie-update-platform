@@ -180,7 +180,6 @@ export default function ShowcaseNowShowing() {
    
     const dateFiltered = mapped.filter((x: any) => isWithinWindow(x.date, windowMode));
 
-    // console.log("WindowMode:", windowMode, "Mapped:", mapped.length, "DateFiltered:", dateFiltered.length);
 
   
     if (!selectedRating) return dateFiltered;

@@ -24,7 +24,7 @@ function isWithinLast7Days(dateStr) {
   return diffDays >= 0 && diffDays <= 7;
 }
 
-// ✅ score: prefer OMDb imdb_rating, fallback TMDB vote_average, fallback 0
+//  score: prefer OMDb imdb_rating, fallback TMDB vote_average, fallback 0
 function score(item) {
   const imdb = toNum(item.imdb_rating);
   if (imdb != null && imdb > 0) return imdb;
@@ -50,17 +50,17 @@ export async function getWeeklyTop5({ appUrl }) {
   console.log("moviesRes keys =", Object.keys(moviesRes.data || {}));
   console.log("tvRes keys =", Object.keys(tvRes.data || {}));
 
-  // ✅ FIXED shapes
+  //  FIXED shapes
   const movieItems = moviesRes.data?.items ?? [];
   const tvItems =
     tvRes.data?.result?.data ?? tvRes.data?.data ?? tvRes.data?.items ?? [];
 
-  console.log("✅ movieItems length =", movieItems.length);
-  console.log("✅ tvItems length =", tvItems.length);
+  console.log(" movieItems length =", movieItems.length);
+  console.log(" tvItems length =", tvItems.length);
   console.log("movie sample =", movieItems[0]);
   console.log("tv sample =", tvItems[0]);
 
-  // ✅ normalize
+  //  normalize
   const combined = [
     ...movieItems.map((m) => ({
       kind: "movie",
@@ -90,7 +90,7 @@ export async function getWeeklyTop5({ appUrl }) {
 
   console.log("combined length =", combined.length);
 
-  // ✅ last 7 days
+  //  last 7 days
   const recent = combined.filter((x) => isWithinLast7Days(x.date));
   console.log("recent length (last7days) =", recent.length);
   console.log("recent sample =", recent[0]);
@@ -100,18 +100,18 @@ export async function getWeeklyTop5({ appUrl }) {
     return imdb != null && imdb > 0;
   }).length;
 
-  console.log("✅ valid imdb count =", validImdbCount);
-  console.log("✅ invalid imdb count =", recent.length - validImdbCount);
+  console.log(" valid imdb count =", validImdbCount);
+  console.log(" invalid imdb count =", recent.length - validImdbCount);
 
-  // ✅ IMPORTANT: sort desc by score
+  
   recent.sort((a, b) => score(b) - score(a));
 
-  // ✅ take top 5
+ 
   const top5 = recent.slice(0, 5);
 
-  console.log("✅ top5 length =", top5.length);
+  console.log(" top5 length =", top5.length);
   console.log(
-    "✅ top5 titles =",
+    " top5 titles =",
     top5.map(
       (x) =>
         `${x.title} (imdb=${x.imdb_rating}, vote=${x.vote_average}, score=${score(
@@ -119,7 +119,7 @@ export async function getWeeklyTop5({ appUrl }) {
         )})`
     )
   );
-  console.log("✅ top5 sample =", top5[0]);
+  console.log(" top5 sample =", top5[0]);
 
   return top5;
 }

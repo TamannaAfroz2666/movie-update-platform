@@ -24,7 +24,6 @@ export default function MovieUpdatesModal({ open, onClose }: Props) {
         try {
 
             const user = await dispatch(addMovieUser(values.email)).unwrap();
-            // console.log('user', user)
 
             message.success(`Added: ${user.email}`);
             form.resetFields();

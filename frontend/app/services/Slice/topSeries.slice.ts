@@ -29,7 +29,6 @@ const trendingSeriesSlice = createSlice({
                 state.error = null;
             })
             .addCase(getSeriesThunk.fulfilled, (state, action) => {
-                console.log("TOP SERIES PAYLOAD:", action.payload);
                 state.loading = false;
                 state.results = action.payload;
 

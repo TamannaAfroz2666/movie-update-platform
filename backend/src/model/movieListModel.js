@@ -22,7 +22,7 @@ export async function createMovieUserModel(email) {
 
 export async function delateProfileByID(id) {
   try {
-    console.log('id in model', id);
+    
     const query = `
       DELETE FROM users 
         WHERE id = $1::uuid
@@ -30,7 +30,6 @@ export async function delateProfileByID(id) {
     `;
 
     const result = await pool.query(query, [id]);
-    console.log('[DB RESULT]', result.rowCount, result.rows);
 
     if (result.rows.length === 0) {
       return { success: false, message: 'User not found' };

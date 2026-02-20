@@ -8,7 +8,6 @@ export async function getMovieList(req, res, next) {
     const data = await getMoviesInfo();
 
     if (!data) {
-      console.log('there have something happen in controller');
       return (res.status(404).json({ success: false, message: 'data is not call in controller' }));
     }
     return res.status(200).json({ success: true, message: 'Movie data view all', data });
@@ -58,7 +57,6 @@ export async function getTopSeriesDataControllerIs(req, res, next) {
     const { data } = await getTopSeriesInfo({ enrichOmdb: wantOmdb });
 
     if (!data) {
-      console.log('there have something happen in controller');
       return (res.status(404).json({ success: false, message: 'data is not call in controller' }));
     }
 
@@ -137,7 +135,7 @@ export async function getTvShowsControllerIs(req, res, next) {
 export async function addMovieUserController(req, res, next) {
   try {
     const { email } = req.body;
-    console.log(" email from body:", email);
+   
 
     const data = await addMovieUserService(email);
     if (!data) {
@@ -161,10 +159,10 @@ export async function addMovieUserController(req, res, next) {
 
 export async function deleteMovieUserController(req, res, next) {
   try {
-    console.log(" DELETE HIT", req.method, req.originalUrl);
+    
 
     const { id } = req.params;
-    console.log(" email from body:", id);
+    
 
     const data = await deleteMovieUserService(id);
     if (!data?.success) {

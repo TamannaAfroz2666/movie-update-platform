@@ -30,8 +30,7 @@ export async function getMoviesInfo() {
 
         const client = tmdbUrlCreat();
 
-        // console.log("TMDB_BASE_URL:", process.env.TMDB_BASE_URL);
-        // console.log("TMDB_ACCESS_TOKEN exists:", Boolean(process.env.TMDB_ACCESS_TOKEN));
+       
         const { data } = await client.get('/movie/top_rated');
 
         if (!data) {

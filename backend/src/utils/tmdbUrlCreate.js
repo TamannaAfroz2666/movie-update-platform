@@ -3,7 +3,6 @@ import axios from "axios";
 export  function tmdbUrlCreat() {
 
     const TMDB_BASE_URL = process.env.TMDB_BASE_URL;
-    console.log('TMDB_BASE_URL', TMDB_BASE_URL);
 
 
     const TMDB_ACCESS_TOKEN = process.env.TMDB_ACCESS_TOKEN;
