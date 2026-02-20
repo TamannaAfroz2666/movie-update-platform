@@ -195,21 +195,6 @@ export default function ShowcaseNowShowing() {
     });
   }, [rawList, selectedRating, windowMode]);
 
-
-
- 
-  useEffect(() => {
-   
-    console.table(
-      items.map((x: any) => ({
-        title: x.title,
-        rating: x.rating,
-        date: x.date,
-      }))
-    );
-  }, [windowMode, items]);
-
-
   // combine api call 
   useEffect(() => {
    
