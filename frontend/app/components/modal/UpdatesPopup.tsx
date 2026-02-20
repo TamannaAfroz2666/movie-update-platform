@@ -58,7 +58,7 @@ const { loading, error } = useAppSelector((s) => s.movieUser);
     try {
 
       const user = await dispatch(addMovieUser(values.email)).unwrap();
-      console.log('user', user)
+      // console.log('user', user)
 
       message.success(`Added: ${user.email}`);
       form.resetFields();

@@ -17,8 +17,8 @@ import { isWithinWindow } from "@/app/utils/dateFilter";
 const TMDB_IMG_780 = "https://image.tmdb.org/t/p/w780";
 
 export default function ShowcaseNowShowing() {
+  
   const dispatch = useAppDispatch();
-
   const [activeTab, setActiveTab] = useState<TabKey>("now");
   const [selectedRating, setSelectedRating] = useState(imdbRatings[0]?.value || "");
   const [feed, setFeed] = useState<any[]>([]);
@@ -113,9 +113,7 @@ export default function ShowcaseNowShowing() {
 
 
 
-  /**
-   *   IntersectionObserver to trigger loadMore when bottom reached
-   */
+ 
   useEffect(() => {
     if (activeTab !== "now") return;
     if (!sentinelRef.current) return;
