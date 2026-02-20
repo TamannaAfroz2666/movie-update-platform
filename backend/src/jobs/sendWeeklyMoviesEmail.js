@@ -8,7 +8,7 @@ import { sendEmail } from "../utils/mailer.js";
 
 
 
-export async function sendWeeklyMoviesToOne(to, baseUrl) {
+export async function sendWeeklyMoviesToOne(to, appUrlFromReq ) {
 
 
   
