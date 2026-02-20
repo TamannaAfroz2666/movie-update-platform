@@ -135,10 +135,10 @@ export async function getTvShowsControllerIs(req, res, next) {
 export async function addMovieUserController(req, res, next) {
   try {
     const { email } = req.body;
-    const baseUrl = `${req.protocol}://${req.get("host")}`;
-    console.log('baseUrl',baseUrl)
-   
+    const proto = req.headers["x-forwarded-proto"] || "https";
+    const baseUrl = `${proto}://${req.get("host")}`;
 
+    console.log('base url', baseUrl);
     const data = await addMovieUserService(email);
     if (!data) {
       return res.status(404).json({ success: false, message: "service failed" });
@@ -147,7 +147,7 @@ export async function addMovieUserController(req, res, next) {
     //  respond fast
     // res.status(201).json({ success: true, data });
 
-      try {
+    try {
       await sendWeeklyMoviesToOne(email, baseUrl);
       return res.status(201).json({ success: true, data, emailSent: true });
     } catch (e) {
@@ -164,10 +164,10 @@ export async function addMovieUserController(req, res, next) {
 
 export async function deleteMovieUserController(req, res, next) {
   try {
-    
+
 
     const { id } = req.params;
-    
+
 
     const data = await deleteMovieUserService(id);
     if (!data?.success) {
