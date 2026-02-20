@@ -9,20 +9,20 @@ import { getOmdbByImdbController } from "../controller/omdbController.js";
 const router = Router();
 
 
-router.get('/movie-list', getMovieList ); //done
+router.get('/movie-list', getMovieList ); 
 
-router.post('/movie-user',validateRegistration, handleValidation, addMovieUserController); //done
-router.delete('/movie-user/:id', deleteMovieUserController) //done
-router.get('/movie-user', viewMovieUserController); //pro
+router.post('/movie-user',validateRegistration, handleValidation, addMovieUserController); 
+router.delete('/movie-user/:id', deleteMovieUserController) 
+router.get('/movie-user', viewMovieUserController); 
 
 // trending movies api route 
 
-router.get('/trending/movies/feed', getTrendingMoviesControllerIs); //done
-router.get('/top-series', getTopSeriesDataControllerIs); //  done
-router.get('/tv-shows', getTvShowsControllerIs); //done
-router.get('/comming-soon', getCommingSoonControllerIs); //done
+router.get('/trending/movies/feed', getTrendingMoviesControllerIs); 
+router.get('/top-series', getTopSeriesDataControllerIs); 
+router.get('/tv-shows', getTvShowsControllerIs); 
+router.get('/comming-soon', getCommingSoonControllerIs); 
 //search and filter api
-router.get("/omdb/by-imdb", getOmdbByImdbController);  //done
+router.get("/omdb/by-imdb", getOmdbByImdbController);  
 
 
 

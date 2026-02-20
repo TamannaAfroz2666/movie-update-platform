@@ -29,10 +29,8 @@ export async function enrichMoviesWithOmdb(items) {
   const enrichedHead = await Promise.all(
     head.map(async (m) => {
       try {
-        // ✅ 1) TMDB external_ids
         const ex = await tmdb.get(`/movie/${m.id}/external_ids`);
         const imdbId = ex?.data?.imdb_id;
-        console.log("TMDB external_ids:", m.id, "=>", imdbId);
         if (!imdbId) {
           console.log("SKIP OMDb: imdbId missing for tmdb movie id =", m.id);
           return { ...m, imdb_id: null, imdb_rating: null, box_office: null, awards: null, runtime: null };

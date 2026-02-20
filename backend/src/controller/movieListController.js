@@ -141,11 +141,8 @@ export async function addMovieUserController(req, res, next) {
     console.log('base url', baseUrl);
     const data = await addMovieUserService(email);
     if (!data) {
-      return res.status(404).json({ success: false, message: "service failed" });
+      return res.status(404).json({ success: false, message: "Email already exists" });
     }
-
-    //  respond fast
-    // res.status(201).json({ success: true, data });
 
     try {
       await sendWeeklyMoviesToOne(email, baseUrl);
