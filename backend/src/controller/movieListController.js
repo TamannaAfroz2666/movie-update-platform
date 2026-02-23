@@ -1,7 +1,8 @@
 import axios from "axios";
 import { sendWeeklyMoviesToOne } from "../jobs/sendWeeklyMoviesEmail.js";
-import { addMovieUserService, deleteMovieUserService, getCommingSoonMoviesInfo, getMoviesInfo, getTopSeriesInfo, getTrendingMoviesInfo, viewMovieUserService } from "../services/movieListService.js";
+import { addMovieUserService, updateMovieUserService, getCommingSoonMoviesInfo, getMoviesInfo, getTopSeriesInfo, getTrendingMoviesInfo, viewMovieUserService } from "../services/movieListService.js";
 import { getTvShowServiceInfo } from "../services/tvShow.service.js";
+import { makeUnsubscribeToken } from "../utils/UnsubscribeToken.js";
 
 export async function getMovieList(req, res, next) {
   try {
@@ -135,17 +136,30 @@ export async function getTvShowsControllerIs(req, res, next) {
 export async function addMovieUserController(req, res, next) {
   try {
     const { email } = req.body;
-    const proto = req.headers["x-forwarded-proto"] || "https";
-    const baseUrl = `${proto}://${req.get("host")}`;
+    // const proto =
+    //   req.headers["x-forwarded-proto"] ||
+    //   (process.env.NODE_ENV === "production" ? "https" : "http");
 
-    console.log('base url', baseUrl);
+    // const baseUrl = `${proto}://${req.get("host")}`;
+
+    // console.log('base url', baseUrl);
     const data = await addMovieUserService(email);
     if (!data) {
       return res.status(404).json({ success: false, message: "Email already exists" });
     }
 
+    const baseUrl =
+      process.env.BACKEND_URL || `${req.protocol}://${req.get("host")}`;
+
+    // ✅ 2) token
+    const token = makeUnsubscribeToken(data.id);
+
+    // ✅ 3) unsubscribe link
+    const unsubscribeLink = `${baseUrl}/api/unsubscribe?token=${encodeURIComponent(token)}`;
+    console.log('unsubscribeLink', unsubscribeLink)
+
     try {
-      await sendWeeklyMoviesToOne(email, baseUrl);
+      await sendWeeklyMoviesToOne(email, baseUrl, unsubscribeLink);
       return res.status(201).json({ success: true, data, emailSent: true });
     } catch (e) {
       console.error("Instant email failed:", e?.message || e);
@@ -159,23 +173,26 @@ export async function addMovieUserController(req, res, next) {
 }
 
 
-export async function deleteMovieUserController(req, res, next) {
+
+
+export async function updateMovieUserController(req, res, next) {
   try {
-
-
     const { id } = req.params;
 
+    const data = await updateMovieUserService(id);
 
-    const data = await deleteMovieUserService(id);
     if (!data?.success) {
-      return res.status(404).json({ success: false, message: data?.message ?? "User not found" });
+      return res.status(404).json({
+        success: false,
+        message: data?.message ?? "User not found",
+      });
     }
 
-    return res.status(200).json({ success: true, message: "This profile successfully deleted" });
-
-
-
-
+    return res.status(200).json({
+      success: true,
+      message: "Unsubscribed successfully",
+      data,
+    });
   } catch (err) {
     next(err);
   }

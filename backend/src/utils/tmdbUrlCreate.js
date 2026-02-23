@@ -6,7 +6,7 @@ export  function tmdbUrlCreat() {
 
 
     const TMDB_ACCESS_TOKEN = process.env.TMDB_ACCESS_TOKEN;
-    console.log('TMDB_ACCESS_TOKEN', TMDB_ACCESS_TOKEN);
+    // console.log('TMDB_ACCESS_TOKEN', TMDB_ACCESS_TOKEN);
 
 
     return axios.create({

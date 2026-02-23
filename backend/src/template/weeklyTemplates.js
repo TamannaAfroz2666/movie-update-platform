@@ -6,7 +6,7 @@ export function weeklyMoviesTemplate({
   year = new Date().getFullYear(),
   addressLine = "677 Adabor,Dhaka,Bangladesh",
   prefsLink = "#",
-  unsubscribeLink = "#",
+  unsubscribeLink
 }) {
   // ---------- Helpers ----------
   const img = (path) =>
@@ -44,22 +44,22 @@ export function weeklyMoviesTemplate({
   );
 
   const getImdb = (m) => {
-  const v =
-    m?.imdb_rating ??     // তোমার normalized field
-    m?.imdbRating ??      // যদি কোথাও camelCase আসে
-    null;
+    const v =
+      m?.imdb_rating ??
+      m?.imdbRating ??
+      null;
 
-  const n = Number(v);
-  return Number.isFinite(n) ? n : null;
-};
+    const n = Number(v);
+    return Number.isFinite(n) ? n : null;
+  };
 
-// ✅ 1) valid rating only
-const valid = (movies || []).filter((m) => getImdb(m) != null);
 
-// ✅ 2) sort উচ্চ থেকে নিম্ন
-valid.sort((a, b) => getImdb(b) - getImdb(a));
+  const valid = (movies || []).filter((m) => getImdb(m) != null);
 
-  
+
+  valid.sort((a, b) => getImdb(b) - getImdb(a));
+
+
   const top5 = valid.slice(0, 5);
 
   // Thumbnails: top 3 posters
@@ -146,6 +146,7 @@ valid.sort((a, b) => getImdb(b) - getImdb(a));
       return featureCardHTML(m, label);
     })
     .join("");
+
 
   // ---------- Render ----------
   return `
@@ -245,7 +246,11 @@ valid.sort((a, b) => getImdb(b) - getImdb(a));
               <div style="font-size:13px; color:#666666; line-height:1.6;">
                 <a href="${prefsLink}" style="color:#1a73e8; text-decoration:none;">Update your email preferences</a>
                 &nbsp;|&nbsp;
-                <a href="${unsubscribeLink}" style="color:#1a73e8; text-decoration:none;">Click here to unsubscribe</a>
+                <a href="${unsubscribeLink}"
+                  target="_blank"
+                  rel="noopener noreferrer"
+
+                 style="color:#1a73e8; text-decoration:none;">Click here to unsubscribe</a>
               </div>
 
               <div style="font-size:12px; color:#888888; margin-top:14px; line-height:1.6;">

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { createMovieUserModel, delateProfileByID, findUserByEmail, viewProfile } from "../model/movieListModel.js";
+import { createMovieUserModel, unsubscribeUserById, findUserByEmail, viewProfile, resubscribeUserById } from "../model/movieListModel.js";
 import { enrichMoviesWithOmdb } from "./enrichOmdb.service.js";
 import { enrichTvWithOmdb } from "../utils/enRichTvSeriesOmdb.js";
 
@@ -8,11 +8,12 @@ import { enrichTvWithOmdb } from "../utils/enRichTvSeriesOmdb.js";
 const tmdbUrlCreat = () => {
 
     const TMDB_BASE_URL = process.env.TMDB_BASE_URL;
-    console.log('TMDB_BASE_URL', TMDB_BASE_URL);
+    // console.log('TMDB_BASE_URL', TMDB_BASE_URL);
 
 
     const TMDB_ACCESS_TOKEN = process.env.TMDB_ACCESS_TOKEN;
-    console.log('TMDB_ACCESS_TOKEN', TMDB_ACCESS_TOKEN);
+
+    // console.log('TMDB_ACCESS_TOKEN', TMDB_ACCESS_TOKEN);
 
 
     return axios.create({
@@ -30,7 +31,7 @@ export async function getMoviesInfo() {
 
         const client = tmdbUrlCreat();
 
-       
+
         const { data } = await client.get('/movie/top_rated');
 
         if (!data) {
@@ -78,9 +79,9 @@ export async function getTrendingMoviesInfo({ cursor, pageSize = 15, enrichOmdb 
     // ✅ only take pageSize items (TMDB returns 20, we slice 6)
     let items = results.slice(0, pageSize);
 
-      if (enrichOmdb) {
-    items = await enrichMoviesWithOmdb(items); // ✅ returns enriched array
-  }
+    if (enrichOmdb) {
+        items = await enrichMoviesWithOmdb(items); // ✅ returns enriched array
+    }
 
     // ✅ determine next cursor
     let next = null;
@@ -118,7 +119,7 @@ export async function getTrendingMoviesInfo({ cursor, pageSize = 15, enrichOmdb 
 }
 
 
-export async function getTopSeriesInfo({enrichOmdb= false} = {}) {
+export async function getTopSeriesInfo({ enrichOmdb = false } = {}) {
     try {
 
         const client = tmdbUrlCreat();
@@ -126,28 +127,28 @@ export async function getTopSeriesInfo({enrichOmdb= false} = {}) {
 
         const { data } = await client.get('/tv/top_rated');
 
-       if (!data?.results) {
-      console.log('data can not find from TMDB');
-      return { data: [], meta: { total: 0 } };
-    }
+        if (!data?.results) {
+            console.log('data can not find from TMDB');
+            return { data: [], meta: { total: 0 } };
+        }
 
-    // 2️⃣ results extract
-    let items = data.results; // let because later reassign হতে পারে
+        // 2️⃣ results extract
+        let items = data.results; // let because later reassign হতে পারে
 
-    // 3️⃣ ✅ OMDb enrich (only when requested)
-    if (enrichOmdb) {
-      items = await enrichTvWithOmdb(items);
-    }
+        // 3️⃣ ✅ OMDb enrich (only when requested)
+        if (enrichOmdb) {
+            items = await enrichTvWithOmdb(items);
+        }
 
-    // 4️⃣ final response
-    return {
-      data: items,
-      meta: {
-        fetched_at: new Date().toISOString(),
-        total: items.length,
-        enriched: enrichOmdb, // debug / clarity
-      },
-    };
+        // 4️⃣ final response
+        return {
+            data: items,
+            meta: {
+                fetched_at: new Date().toISOString(),
+                total: items.length,
+                enriched: enrichOmdb, // debug / clarity
+            },
+        };
 
     } catch (err) {
         console.log('data not add in service ', err)
@@ -158,34 +159,60 @@ export async function getTopSeriesInfo({enrichOmdb= false} = {}) {
 
 
 export async function addMovieUserService(email) {
+  try {
+    console.log("email", email);
+
+    const existing = await findUserByEmail(email);
+
+    // 1) not exists -> create
+    if (!existing) {
+      const data = await createMovieUserModel(email);
+      return data;
+    }
+
+    // 2) exists but unsubscribed -> re-subscribe (UPDATE true)
+    if (existing.is_subscribed === false) {
+      const data = await resubscribeUserById(existing.id);
+      return data;
+    }
+
+    // 3) exists and already subscribed -> block
+    throw new Error("Email already exists");
+
+  } catch (err) {
+    console.log("addMovieUserService error:", err.message);
+    throw err; // controller catch করবে
+  }
+}
+
+export async function updateMovieUserService(id) {
     try {
-        console.log('email', email)
-        const isEmail = await findUserByEmail(email)
-        if (isEmail) {
-            throw new Error("Email already exists");
+        const data = await unsubscribeUserById(id);
+
+        if (!data?.success) {
+            return {
+                success: false,
+                message: data?.message || "Unsubscribe failed",
+            };
         }
-        const data = await createMovieUserModel(email);
-        if (!data) {
-            console.log('data can not find from model')
-        }
-        return data;
+
+        return {
+            success: true,
+            userId: data.userId,
+            message: "User unsubscribed successfully",
+        };
 
     } catch (err) {
-        console.log('data not add in service ', err)
+
+        console.error("[SERVICE ERROR] unsubscribe failed:", err.message);
+
+        return {
+            success: false,
+            message: "Service error while unsubscribing user",
+        };
     }
 }
 
-export async function deleteMovieUserService(id) {
-    try {
-        console.log('id', id)
-
-        const data = await delateProfileByID(id);
-
-        return data;
-    } catch (err) {
-        console.log('data not add in service ', err)
-    }
-}
 export async function viewMovieUserService() {
     try {
 
@@ -198,7 +225,7 @@ export async function viewMovieUserService() {
     } catch (err) {
         console.log('data not add in service ', err)
     }
-}  
+}
 
 ///
 

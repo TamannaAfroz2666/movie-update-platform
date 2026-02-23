@@ -9,8 +9,7 @@ export async function enrichMoviesWithOmdb(items) {
 
   const OMDB_API_KEY = process.env.OMDB_API_KEY;
 
-  console.log("OMDB_BASE_URL =", OMDB_BASE_URL);
-  console.log("OMDB_API_KEY exists =", !!OMDB_API_KEY);
+  
 
   if (!OMDB_API_KEY) throw new Error("OMDB_API_KEY missing");
 

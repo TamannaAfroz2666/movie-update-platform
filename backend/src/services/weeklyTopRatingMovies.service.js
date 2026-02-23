@@ -119,7 +119,7 @@ export async function getWeeklyTop5({ appUrl }) {
         )})`
     )
   );
-  console.log(" top5 sample =", top5[0]);
+  // console.log(" top5 sample =", top5[0]);
 
   return top5;
 }
